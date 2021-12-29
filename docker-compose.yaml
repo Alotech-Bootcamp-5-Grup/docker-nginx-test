@@ -1,0 +1,104 @@
+version: "3.9"
+
+volumes:
+  data_sql:
+
+services:
+
+  projectdb:
+    image: mysql:8.0.27
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'projectdb'
+      MYSQL_USER: 'grup5'
+      MYSQL_PASSWORD: 'Alotech21?'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - /root/mysql/data/:/var/lib/mysql/
+      - /root/mysql/conf/:/etc/mysql/conf.d/
+      - /root/mysql/init/:/docker-entrypoint-initdb.d/
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    healthcheck:
+      test: "/usr/bin/mysql --user=grup5 --password=Alotech21? --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  nginx:
+    depends_on:
+      - sso-server
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - 80:80
+
+  sso-server:
+    depends_on:
+      projectdb:
+        condition: service_healthy
+    build:
+      dockerfile: Dockerfile
+      context: ./sso-service/server
+    ports:
+      - 3010:3010
+    environment:
+      DB_HOST: 'projectdb'
+
+  umm-server:
+    depends_on:
+      projectdb:
+        condition: service_healthy
+    build:
+      dockerfile: Dockerfile
+      context: ./user-manager-module/server
+    ports:
+      - 3020:3020
+    environment:
+      DB_HOST: 'projectdb'
+
+  sso-client:
+    depends_on:
+      - sso-server
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      dockerfile: Dockerfile
+      context: ./sso-service/frontend
+    ports:
+      - 3011:3011
+
+  umm-client:
+    depends_on:
+      - sso-server
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      dockerfile: Dockerfile
+      context: ./user-manager-module/frontend
+    ports:
+      - 3021:3021
+
+  consumer:
+    depends_on:
+      - sso-server
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      dockerfile: Dockerfile
+      context: ./consumer
+    ports:
+      - 3000:3000

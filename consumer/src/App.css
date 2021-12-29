@@ -1,0 +1,47 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  font-family: "Roboto Mono", monospace;
+  color: #364547;
+  box-sizing: border-box;
+}
+
+.card {
+  width: 60%;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  border-radius: 2em;
+  padding: 2em 1em;
+  margin: 20px;
+}
+
+.card-title {
+  text-decoration: underline;
+  font-size: 3.5em;
+  text-align: center;
+}
+
+.card-item {
+  font-size: 1.8em;
+  width: 80%;
+  margin: 1em auto;
+}
+
+.card-item-title {
+  font-weight: bold;
+}
+
+.clear-cookie {
+  width: 30%;
+  font-size: 18px;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(to right, #c31432 5%, #364547);
+  padding: 10px 0;
+}
