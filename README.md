@@ -13,6 +13,16 @@ Tüm servisler çalışıp birbirleriyle iletişim kurabiliyor.
 
 Subdomainler arasında cookie paylaşımı yapılamadı.
 
+#### Önemli!
+
+Projenin ana dökümantasyonlarına ve kaynak koduna erişmek için aşağıdaki repositoryleri ziyaret edin.
+
+- [Consumer](https://github.com/Alotech-Bootcamp-5-Grup/consumer)
+
+- [SSO Service](https://github.com/Alotech-Bootcamp-5-Grup/sso-service)
+
+- [User Manager Module](https://github.com/Alotech-Bootcamp-5-Grup/user-manager-module)
+
 ## Kurulum
 
 * Projeyi klonlayın:
